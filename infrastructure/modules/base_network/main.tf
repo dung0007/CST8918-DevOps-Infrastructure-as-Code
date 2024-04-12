@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.98.0"
+      version = "~> 3.99.0"
     }
   }
 
@@ -15,7 +15,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "network" {
-  name     = "cst8918-final-project-group-fp3"
+  name     = "cst8918-final-project-group-3"
   location = "Canada Central"
 }
 
