@@ -4,7 +4,7 @@ provider "azurerm" {
 
 resource "azurerm_kubernetes_cluster" "aks_test" {
   name                = "aks-test"
-  location            = "Canada Central"
+  location            = "westus3"
   resource_group_name = "cst8918-final-project-group-3"
   dns_prefix          = "akstest"
 
@@ -23,7 +23,7 @@ resource "azurerm_kubernetes_cluster" "aks_test" {
 
 resource "azurerm_kubernetes_cluster" "aks_prod" {
   name                = "aks-prod"
-  location            = "Canada Central"
+  location            = "westus3"
   resource_group_name = "cst8918-final-project-group-3"
   dns_prefix          = "aksprod"
 

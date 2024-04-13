@@ -16,7 +16,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "network" {
   name     = "cst8918-final-project-group-3"
-  location = "Canada Central"
+  location = "westus3"
 }
 
 resource "azurerm_virtual_network" "vnet" {

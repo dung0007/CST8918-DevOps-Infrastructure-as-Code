@@ -3,8 +3,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "backend_rg" {
-  name     = "cst8918-final-project-group-3"
-  location = "Canada Central"
+  name     = "cst8918-final-project-group-3-backend-rg"
+  location = "westus3"
 }
 
 resource "azurerm_storage_account" "backend_sa" {
@@ -36,4 +36,9 @@ output "storage_account_name" {
 
 output "container_name" {
   value = azurerm_storage_container.terraform_state.name
+}
+
+output "primary_access_key" {
+  value     = azurerm_storage_account.backend_sa.primary_access_key
+  sensitive = true
 }
