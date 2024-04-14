@@ -17,5 +17,10 @@ variable "container_registry_sku" {
 
 variable "redis_sku" {
   description = "SKU for Azure Cache for Redis"
-  default     = "Basic"
+  default     = "Premium"
+}
+
+variable "redis_family" {
+  description = "Family for Azure Cache for Redis"
+  default     = "P"
 }
