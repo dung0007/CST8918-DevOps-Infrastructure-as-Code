@@ -25,7 +25,9 @@ jobs:
     # Run tflint
     - name: Terraform Lint
       run: tflint
+      working-directory: <path/to/your/terraform/files>
 
     # Terraform Plan
     - name: Terraform Plan
       run: terraform plan
+      working-directory: infrastructure
