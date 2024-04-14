@@ -23,7 +23,7 @@ resource "azurerm_container_registry" "acr" {
 
 
 resource "azurerm_redis_cache" "redis_test" {
-  name                = "remixweathertestredis"
+  name                = "remixweather-redis-test"
   location            = var.location
   resource_group_name = var.resource_group_name
   capacity            = 1
@@ -33,7 +33,7 @@ resource "azurerm_redis_cache" "redis_test" {
 }
 
 resource "azurerm_redis_cache" "redis_prod" {
-  name                = "remixweatherprodredis"
+  name                = "remixweather-redis-prod"
   location            = var.location
   resource_group_name = var.resource_group_name
   capacity            = 1
