@@ -3,18 +3,17 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "backend_rg" {
-  name     = "cst8918-final-project-group-3"
-  location = "West US 3"
+  name     = "cst8918-final-project-group-3-backend-rg"
+  location = "westus3"
 }
 
 resource "azurerm_storage_account" "backend_sa" {
-  name                     = "cst8919backendstoragead"
+  name                     = "cst8919backendstorage"
   resource_group_name      = azurerm_resource_group.backend_rg.name
   location                 = azurerm_resource_group.backend_rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
   min_tls_version          = "TLS1_2"
-
 
   tags = {
     environment = "backend"
@@ -23,7 +22,7 @@ resource "azurerm_storage_account" "backend_sa" {
 
 resource "azurerm_storage_container" "terraform_state" {
   name                  = "terraform-state"
-  storage_account_name = azurerm_storage_account.backend_sa.name
+  storage_account_name  = azurerm_storage_account.backend_sa.name
   container_access_type = "private"
 }
 
@@ -37,4 +36,9 @@ output "storage_account_name" {
 
 output "container_name" {
   value = azurerm_storage_container.terraform_state.name
+}
+
+output "primary_access_key" {
+  value     = azurerm_storage_account.backend_sa.primary_access_key
+  sensitive = true
 }
