@@ -8,19 +8,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    # Login to Azure using service principal credentials
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     # Setup Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: '1.1.0'
-
-    # Login to Azure using federated credentials
-    - name: Login to Azure
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        federated-credential: 'azure-federated-credentials'
 
     # Terraform Format Check
     - name: Terraform Format
@@ -36,5 +34,5 @@ jobs:
     - name: Run tfsec
       uses: triat/terraform-security-scan@v3
       with:
-        tfsec_actions_working_dir: infrastructure  # Specify the directory where your Terraform files are located
-        tfsec_version: 'latest'  # Optionally, specify a version of tfsec to use
+        tfsec_actions_working_dir: infrastructure
+        tfsec_version: 'latest'
