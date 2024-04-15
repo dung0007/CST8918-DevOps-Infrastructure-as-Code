@@ -9,33 +9,31 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'  # Set to 'recursive' if there are nested submodules
+        token: ${{ secrets.GITHUB_TOKEN }}  # Ensures access to private submodules
 
-    # Login to Azure using service principal credentials
     - name: Login to Azure
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # Setup Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: '1.1.0'
 
-    # Install tflint
     - name: Install tflint
       run: |
         curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-      working-directory: infrastructure
+      working-directory: ./infrastructure  # Explicitly specify the path
 
-    # Run tflint
     - name: Terraform Lint
       run: tflint
-      working-directory: infrastructure
+      working-directory: ./infrastructure  # Consistent use of the explicit path
 
-    # Terraform Plan
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./infrastructure
-
+      working-directory: ./infrastructure  # Ensure this is the correct path
