@@ -21,5 +21,4 @@ jobs:
           resource-group: cst8918-final-project-group-3-backend-rg01
           cluster-name: adaksclusterfp3
       - name: Deploy to Production Environment
-        run: |
-          kubectl apply -f /path/to/production/deployment.yaml
+        run: kubectl apply -f /path/to/production/deployment.yaml
