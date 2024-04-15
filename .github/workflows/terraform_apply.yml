@@ -11,13 +11,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    # Login to Azure using federated credentials
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        federated-credential: 'azure-federated-credentials'
+
     # Setup Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_version: '1.1.0'
 
-    # Terraform Apply
+    # Terraform Apply to apply the configurations
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: infrastructure  # specify the directory containing the Terraform files
+      working-directory: infrastructure  # Specify the directory containing the Terraform files
