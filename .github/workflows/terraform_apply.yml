@@ -20,4 +20,4 @@ jobs:
     # Terraform Apply
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      working-directory: infrastructure\modules  # specify the directory containing the Terraform files
+      working-directory: infrastructure  # specify the directory containing the Terraform files
