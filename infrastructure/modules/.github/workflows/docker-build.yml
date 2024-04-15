@@ -15,9 +15,9 @@ jobs:
         uses: azure/docker-login@v1
         with:
           login-server: adconatinerproject.azurecr.io
-          username: adconatinerproject
-          password: 6Uiv84TK0Fqq+h27iTk2DS8EmE9dfPYrMmh1Peoubz+ACRBJGyDA
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
       - name: Build and Push Docker Image
         run: |
-          docker build -t <your-acr-name>.azurecr.io/weather-app:${{ github.sha }} .
-          docker push <your-acr-name>.azurecr.io/weather-app:${{ github.sha }}
+          docker build -t adconatinerproject.azurecr.io/weather-app:${{ github.sha }} .
+          docker push adconatinerproject.azurecr.io/weather-app:${{ github.sha }}
