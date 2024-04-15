@@ -21,14 +21,14 @@ jobs:
     - name: Install tflint
       run: |
         curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-      working-directory: infrastructure  # Ensure this is the correct path where your Terraform files are located
+      working-directory: infrastructure\modules  # Ensure this is the correct path where your Terraform files are located
 
     # Run tflint
     - name: Terraform Lint
       run: tflint
-      working-directory: infrastructure  # Consistent use of the correct directory
+      working-directory: infrastructure\modules  # Consistent use of the correct directory
 
     # Terraform Plan
     - name: Terraform Plan
       run: terraform plan
-      working-directory: infrastructure  # Consistent use of the correct directory
+      working-directory: infrastructure\modules  # Consistent use of the correct directory
