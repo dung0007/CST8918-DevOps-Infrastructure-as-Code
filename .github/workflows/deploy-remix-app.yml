@@ -8,20 +8,23 @@ on:
     branches:
       - main
 
-jobs:
-  deploy-to-production:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Connect to AKS Production Cluster
-        uses: azure/aks-set-context@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          resource-group: cst8918-final-project-group-3-backend-rg01
-          cluster-name: adaksclusterfp3
-
-      - name: Deploy to Production Environment
-        run: |
-          kubectl set image deployment/weather-app weather-app=adconatinerproject.azurecr.io/weather-app:${{ env.SHA }}
+jobs:            
+        deploy-to-production:
+          if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+          runs-on: ubuntu-latest
+          steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+      
+            - name: Set up kubectl
+              uses: azure/aks-set-context@v1
+              with:
+                creds: ${{ secrets.AZURE_CREDENTIALS }}
+                cluster-name: adaksclusterfp3
+                resource-group: cst8918-final-project-group-3-backend-rg01
+      
+            - name: Deploy to production environment
+              run: |
+                kubectl apply -f production-deployment.yaml
+                kubectl apply -f production-service.yaml
+      
