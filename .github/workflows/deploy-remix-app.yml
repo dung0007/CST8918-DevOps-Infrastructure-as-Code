@@ -14,11 +14,14 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+
       - name: Connect to AKS Production Cluster
         uses: azure/aks-set-context@v1
         with:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
           resource-group: cst8918-final-project-group-3-backend-rg01
           cluster-name: adaksclusterfp3
+
       - name: Deploy to Production Environment
-        run: kubectl apply -f deploy/production/deployment.yaml
+        run: |
+          kubectl set image deployment/weather-app weather-app=adconatinerproject.azurecr.io/weather-app:${{ env.SHA }}
