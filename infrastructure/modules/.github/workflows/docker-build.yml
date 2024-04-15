@@ -1,0 +1,23 @@
+name: Build and Push Docker Image
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: adconatinerproject.azurecr.io
+          username: adconatinerproject
+          password: 6Uiv84TK0Fqq+h27iTk2DS8EmE9dfPYrMmh1Peoubz+ACRBJGyDA
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t <your-acr-name>.azurecr.io/weather-app:${{ github.sha }} .
+          docker push <your-acr-name>.azurecr.io/weather-app:${{ github.sha }}

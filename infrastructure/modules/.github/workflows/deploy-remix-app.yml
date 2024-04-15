@@ -1,0 +1,25 @@
+name: Deploy Remix Weather Application
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-to-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Connect to AKS Production Cluster
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          resource-group: cst8918-final-project-group-3-backend-rg01
+          cluster-name: adaksclusterfp3
+      - name: Deploy to Production Environment
+        run: |
+          kubectl apply -f /path/to/production/deployment.yaml
