@@ -12,8 +12,8 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
       with:
-        submodules: 'true'  # Set to 'recursive' if there are nested submodules
-        token: ${{ secrets.GITHUB_TOKEN }}  # Ensures access to private submodules
+        submodules: 'true'
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Login to Azure
       uses: azure/login@v1
@@ -25,15 +25,19 @@ jobs:
       with:
         terraform_version: '1.1.0'
 
+    - name: Initialize Terraform
+      run: terraform init
+      working-directory: ./infrastructure/modules/backend
+
     - name: Install tflint
       run: |
         curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-      working-directory: ./infrastructure  # Explicitly specify the path
+      working-directory: ./infrastructure/modules/backend
 
     - name: Terraform Lint
       run: tflint
-      working-directory: ./infrastructure  # Consistent use of the explicit path
+      working-directory: ./infrastructure/modules/backend
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./infrastructure/modules/backend   # Ensure this is the correct path
+      working-directory: ./infrastructure/modules/backend
