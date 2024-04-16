@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remix-weather-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: remix-weather-app
+  template:
+    metadata:
+      labels:
+        app: remix-weather-app
+    spec:
+      containers:
+        - name: remix-weather-app
+          image: adconatinerproject.azurecr.io/weather-app:${{ github.sha }}
+          ports:
+            - containerPort: 3000

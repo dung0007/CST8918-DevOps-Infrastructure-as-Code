@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: remix-weather-app-service
+spec:
+  selector:
+    app: remix-weather-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
