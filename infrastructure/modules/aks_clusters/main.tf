@@ -31,10 +31,17 @@ resource "azurerm_kubernetes_cluster" "aks_test" {
     network_plugin    = "kubenet"
     dns_service_ip    = "10.200.0.10"
     service_cidr      = "10.200.0.0/24"
-    network_policy    = "azure"  // Enabling network policy for better security
+    network_policy    = "azure"
   }
 
-  api_server_authorized_ip_ranges = ["203.0.113.0/24"]  // Limit API access to specified IPs
+  api_server_authorized_ip_ranges = ["203.0.113.0/24"]
+
+  addon_profile {
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = "your-log-analytics-workspace-id"
+    }
+  }
 
   role_based_access_control {
     enabled = true
@@ -67,10 +74,17 @@ resource "azurerm_kubernetes_cluster" "aks_prod" {
     network_plugin    = "kubenet"
     dns_service_ip    = "10.100.0.10"
     service_cidr      = "10.100.0.0/24"
-    network_policy    = "azure"  // Enabling network policy
+    network_policy    = "azure"
   }
 
-  api_server_authorized_ip_ranges = ["203.0.113.0/24"]  // Limit API access to specified IPs
+  api_server_authorized_ip_ranges = ["203.0.113.0/24"]
+
+  addon_profile {
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = "your-log-analytics-workspace-id"
+    }
+  }
 
   role_based_access_control {
     enabled = true
