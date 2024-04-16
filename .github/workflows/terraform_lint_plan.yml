@@ -36,4 +36,4 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ./infrastructure  # Ensure this is the correct path
+      working-directory: ./infrastructure/modules/aks_clusters   # Ensure this is the correct path
