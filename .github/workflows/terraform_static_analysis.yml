@@ -1,0 +1,38 @@
+name: Terraform Static Code Analysis
+
+on: push
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # Login to Azure using service principal credentials
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Setup Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: '1.1.0'
+
+    # Terraform Format Check
+    - name: Terraform Format
+      run: terraform fmt -check
+      working-directory: infrastructure
+
+    # Terraform Validation
+    - name: Terraform Validate
+      run: terraform validate
+      working-directory: infrastructure
+
+    # Run tfsec
+    - name: Run tfsec
+      uses: triat/terraform-security-scan@v3
+      with:
+        tfsec_actions_working_dir: ./infrastructure/modules/backend
+        tfsec_version: 'latest'

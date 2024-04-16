@@ -20,20 +20,33 @@ resource "azurerm_kubernetes_cluster" "aks_test" {
   resource_group_name = var.resource_group_name
   dns_prefix          = "akstest"
 
-
   default_node_pool {
     name           = "default"
     node_count     = 1
     vm_size        = "Standard_DS2_v2"
     vnet_subnet_id = data.azurerm_subnet.test_subnet.id
-
   }
 
   network_profile {
-    network_plugin = "kubenet"
-    dns_service_ip = "10.200.0.10"
-    service_cidr   = "10.200.0.0/24"
+    network_plugin    = "kubenet"
+    dns_service_ip    = "10.200.0.10"
+    service_cidr      = "10.200.0.0/24"
+    network_policy    = "azure"
   }
+
+  api_server_authorized_ip_ranges = ["203.0.113.0/24"]
+
+  addon_profile {
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = "your-log-analytics-workspace-id"
+    }
+  }
+
+  role_based_access_control {
+    enabled = true
+  }
+
   identity {
     type = "SystemAssigned"
   }
@@ -55,16 +68,27 @@ resource "azurerm_kubernetes_cluster" "aks_prod" {
     max_count           = 3
     enable_auto_scaling = true
     vnet_subnet_id      = data.azurerm_subnet.prod_subnet.id
-
   }
 
   network_profile {
-    network_plugin = "kubenet"
-    dns_service_ip = "10.100.0.10"
-    service_cidr   = "10.100.0.0/24"
+    network_plugin    = "kubenet"
+    dns_service_ip    = "10.100.0.10"
+    service_cidr      = "10.100.0.0/24"
+    network_policy    = "azure"
   }
 
+  api_server_authorized_ip_ranges = ["203.0.113.0/24"]
 
+  addon_profile {
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = "your-log-analytics-workspace-id"
+    }
+  }
+
+  role_based_access_control {
+    enabled = true
+  }
 
   identity {
     type = "SystemAssigned"

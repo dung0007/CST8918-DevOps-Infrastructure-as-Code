@@ -1,0 +1,43 @@
+name: Terraform Lint and Plan
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: '1.1.0'
+
+    - name: Initialize Terraform
+      run: terraform init
+      working-directory: ./infrastructure/modules/backend
+
+    - name: Install tflint
+      run: |
+        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+      working-directory: ./infrastructure/modules/backend
+
+    - name: Terraform Lint
+      run: tflint
+      working-directory: ./infrastructure/modules/backend
+
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: ./infrastructure/modules/backend
