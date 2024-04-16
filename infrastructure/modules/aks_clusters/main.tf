@@ -25,14 +25,23 @@ resource "azurerm_kubernetes_cluster" "aks_test" {
     node_count     = 1
     vm_size        = "Standard_DS2_v2"
     vnet_subnet_id = data.azurerm_subnet.test_subnet.id
-    enable_auto_scaling = true
-    min_count           = 1
-    max_count           = 3
+  }
+
+  role_based_access_control {
+    enabled = true
+  }
+
+  addon_profile {
+    http_application_routing {
+      enabled = true
+    }
+    kube_dashboard {
+      enabled = true
+    }
   }
 
   network_profile {
-    network_plugin = "azure"
-    network_policy = "calico"
+    network_plugin = "kubenet"
     dns_service_ip = "10.200.0.10"
     service_cidr   = "10.200.0.0/24"
   }
@@ -42,19 +51,6 @@ resource "azurerm_kubernetes_cluster" "aks_test" {
   }
 
   kubernetes_version = "1.29.0"
-
-  role_based_access_control {
-    enabled = true
-  }
-
-  api_server_authorized_ip_ranges = ["203.0.113.0/24"]
-
-  addon_profile {
-    oms_agent {
-      enabled = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.test_workspace.id
-    }
-  }
 }
 
 resource "azurerm_kubernetes_cluster" "aks_prod" {
@@ -67,15 +63,27 @@ resource "azurerm_kubernetes_cluster" "aks_prod" {
     name                = "default"
     node_count          = 1
     vm_size             = "Standard_DS2_v2"
-    vnet_subnet_id      = data.azurerm_subnet.prod_subnet.id
-    enable_auto_scaling = true
     min_count           = 1
     max_count           = 3
+    enable_auto_scaling = true
+    vnet_subnet_id      = data.azurerm_subnet.prod_subnet.id
+  }
+
+  role_based_access_control {
+    enabled = true
+  }
+
+  addon_profile {
+    http_application_routing {
+      enabled = false  # Example: Disable HTTP routing for production
+    }
+    azure_policy {
+      enabled = true
+    }
   }
 
   network_profile {
-    network_plugin = "azure"
-    network_policy = "calico"
+    network_plugin = "kubenet"
     dns_service_ip = "10.100.0.10"
     service_cidr   = "10.100.0.0/24"
   }
@@ -85,32 +93,4 @@ resource "azurerm_kubernetes_cluster" "aks_prod" {
   }
 
   kubernetes_version = "1.29.0"
-
-  role_based_access_control {
-    enabled = true
-  }
-
-  api_server_authorized_ip_ranges = ["203.0.113.0/24"]
-
-  addon_profile {
-    oms_agent {
-      enabled = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.prod_workspace.id
-    }
-  }
-}
-
-# Log Analytics Workspace for AKS Monitoring
-resource "azurerm_log_analytics_workspace" "test_workspace" {
-  name                = "akstest-logs"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  sku                 = "PerGB2018"
-}
-
-resource "azurerm_log_analytics_workspace" "prod_workspace" {
-  name                = "aksprod-logs"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  sku                 = "PerGB2018"
 }
