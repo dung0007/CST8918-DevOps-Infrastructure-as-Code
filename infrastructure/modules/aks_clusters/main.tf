@@ -36,11 +36,8 @@ resource "azurerm_kubernetes_cluster" "aks_test" {
 
   api_server_authorized_ip_ranges = ["203.0.113.0/24"]  // Limit API access to specified IPs
 
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = "<your-log-analytics-workspace-id>"
-    }
+  role_based_access_control {
+    enabled = true
   }
 
   identity {
@@ -75,11 +72,8 @@ resource "azurerm_kubernetes_cluster" "aks_prod" {
 
   api_server_authorized_ip_ranges = ["203.0.113.0/24"]  // Limit API access to specified IPs
 
-  addon_profile {
-    oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = "<your-log-analytics-workspace-id>"
-    }
+  role_based_access_control {
+    enabled = true
   }
 
   identity {
